@@ -7,7 +7,9 @@ from aiogram import F
 from aiogram.types import BotCommand, Message
 from dotenv import load_dotenv
 
-from functions import start, stop, echo, start_menu, share_menu, register_location, register_contact
+from filters import CheckSubFilter
+from functions import start, stop, echo, start_menu, share_menu, register_location, register_contact, check_join, \
+    check_channel_joined
 
 load_dotenv()
 
@@ -19,15 +21,16 @@ dp = Dispatcher()
 
 
 async def main(dp) -> None:
-    bot = Bot(token=TOKEN)
+    bot = Bot(token=TOKEN, skip_updates=True)
     await bot.set_my_commands(
         [
             BotCommand(command="/start", description="Bot ni ishga tushirish"),
-
             BotCommand(command="/share", description="Ma'lumotlarni yuborish")
         ]
     )
     dp.startup.register(start)
+    dp.message.register(check_join, CheckSubFilter())
+    dp.callback_query.register(check_channel_joined, F.data == "check_subscription")
     dp.message.register(start_menu, CommandStart())
     dp.message.register(share_menu, Command('share'))
     dp.message.register(register_location, F.location)
