@@ -1,3 +1,4 @@
+import asyncio
 import os
 from asyncio import run
 
@@ -7,9 +8,8 @@ from aiogram import F
 from aiogram.types import BotCommand, Message
 from dotenv import load_dotenv
 
-from filters import CheckSubFilter
-from functions import start, stop, echo, start_menu, share_menu, register_location, register_contact, check_join, \
-    check_channel_joined
+from functions import start, stop, echo, start_menu, share_menu, register_location, register_contact
+
 
 load_dotenv()
 
@@ -28,16 +28,16 @@ async def main(dp) -> None:
             BotCommand(command="/share", description="Ma'lumotlarni yuborish")
         ]
     )
+
     dp.startup.register(start)
-    dp.message.register(check_join, CheckSubFilter())
-    dp.callback_query.register(check_channel_joined, F.data == "check_subscription")
     dp.message.register(start_menu, CommandStart())
+    # dp.message.register(categories_list, Command('Mahsulot'))
     dp.message.register(share_menu, Command('share'))
     dp.message.register(register_location, F.location)
     dp.message.register(register_contact, F.contact)
-    # dp.message.register(register_contact, F.text=="xabar")
+    dp.message.register(register_contact, F.text=="xabar")
     dp.message.register(echo)
-    # dp.message.register(start_menu, CommandStart())
+    dp.message.register(start_menu, CommandStart())
     dp.shutdown.register(stop)
     await dp.start_polling(bot)
 

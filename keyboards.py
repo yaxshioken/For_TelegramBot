@@ -1,9 +1,22 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+
+from aiogram.types import (ReplyKeyboardMarkup,
+                           KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup)
 
 menu_button = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="button-1", ), KeyboardButton(text="button-2")],
-        [KeyboardButton(text="button-3"), KeyboardButton(text="button-4")]
+        [KeyboardButton(text="Mahsulot", ), KeyboardButton(text="Savat")],
+        [KeyboardButton(text="Malumot"), KeyboardButton(text="TIL")]
+    ],
+    resize_keyboard=True
+)
+categories_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [KeyboardButton(text="Yuzalarni Tozalash Vositalari")],
+        [KeyboardButton(text="Xona Tozalash Vositalari")],
+        [KeyboardButton(text="Maxsus Tozalash Vositalari")],
+        [KeyboardButton(text="Pudratchi Vositalari")],
+        [KeyboardButton(text="Oshxona Tozalash Vositalari")],
+        [KeyboardButton(text="Jismoniy Yordamchi Vositalari")]
     ],
     resize_keyboard=True
 )
