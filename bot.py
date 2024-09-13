@@ -1,19 +1,16 @@
-import asyncio
 import os
 from asyncio import run
 
-from aiogram.filters import CommandStart, Command
-from aiogram import F
-
+from aiogram.filters import Command
 from aiogram.types import BotCommand, Message
 from dotenv import load_dotenv
 
-from functions import start, stop, echo, start_menu, share_menu, register_location, register_contact
-
+from functions import start, stop, vacancy, start_menu, register_name, register_finish, category, product, amount
+from states import SignUp, Product
 
 load_dotenv()
 
-from aiogram import Bot, Dispatcher, F
+from aiogram import Bot, Dispatcher
 
 TOKEN = os.getenv("BOT_TOKEN")
 
@@ -21,23 +18,23 @@ dp = Dispatcher()
 
 
 async def main(dp) -> None:
-    bot = Bot(token=TOKEN, skip_updates=True)
+    bot = Bot(token=TOKEN)
     await bot.set_my_commands(
         [
             BotCommand(command="/start", description="Bot ni ishga tushirish"),
-            BotCommand(command="/share", description="Ma'lumotlarni yuborish")
+            BotCommand(command="/info", description="Shaxsiy ma'lumotlarni olish"),
+            BotCommand(command="/vacancy", description="Ishga e'lon berish"),
+            BotCommand(command="/help", description="Yordam")
         ]
     )
-
     dp.startup.register(start)
-    dp.message.register(start_menu, CommandStart())
-    # dp.message.register(categories_list, Command('Mahsulot'))
-    dp.message.register(share_menu, Command('share'))
-    dp.message.register(register_location, F.location)
-    dp.message.register(register_contact, F.contact)
-    dp.message.register(register_contact, F.text=="xabar")
-    dp.message.register(echo)
-    dp.message.register(start_menu, CommandStart())
+    dp.message.register(category,Product.category)
+    dp.message.register(product,Product.product)
+    dp.message.register(amount,Product.amount)
+    dp.message.register(vacancy, SignUp.vacancy)
+    dp.message.register(register_name, SignUp.name)
+    dp.message.register(register_finish, SignUp.salary)
+    dp.message.register(start_menu, Command('start'))
     dp.shutdown.register(stop)
     await dp.start_polling(bot)
 
